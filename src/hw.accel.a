@@ -74,7 +74,6 @@ romid           =    $FBB3
 ; $38=][, $EA=][+, $06=//e compatible
 ; $2C=Base64An
 ROMID_IIECOMPAT =    6
-ROMID_BASE64A   =    $2C
 romid_ec        =    $FBC0
 ; $EA=//e original, $E0=//e enhanced, $E1=//e EDM, $00=//c
 ; Laser 128s are $E0
@@ -152,10 +151,6 @@ BuildAcceleratorFunction
          ;; first check built-in accelerators
          ldx   romid
 
-         ; a Base64A clone uses annunciator 1 for ROM pagination
-         cpx   #ROMID_BASE64A
-         beq   build_nop_addon ; a base64A clone
-  
          cpx   #ROMID_IIECOMPAT
          bne   build_addon   ; not a //e
 
@@ -220,13 +215,6 @@ build_addon
          ldy   #>addon
          ldx   #(end_addon-addon)
          rts
-
-build_nop_addon
-         lda   #<nop_addon
-         ldy   #>nop_addon
-         ldx   #(end_nop_addon-nop_addon)
-         rts
-
 
 ;-----------------------------------------------------------
 ; 3 distinct accelerator functions
@@ -360,12 +348,3 @@ fcset
          rts
 end_addon
 
-; Function #4: No acceleration option. To be used when
-; switching of function 3 may be an issue.
-; The Base64A clone uses annunciator 1 to page ROM 
-nop_addon
-         nop
-         nop
-         nop
-         rts
-end_nop_addon
